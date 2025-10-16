@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <deque>
 
 
 class GameManager;  // forward declaration
@@ -23,6 +24,14 @@ private:
     bool _isAlive;
     bool _isFireBall;
     float _timeWithPowerupEffect;
+
+    std::deque<sf::Vector2f> _trail;   
+    sf::Vector2f _lastTrailPos;        
+    static constexpr std::size_t TRAIL_MAX_POINTS = 32; 
+    static constexpr float TRAIL_MIN_DIST2 = 9.0f;      
+
+    void addTrailPoint(const sf::Vector2f& p);
+    void drawTrail();                   
 
     GameManager* _gameManager;  // Reference to the GameManager
 

@@ -8,6 +8,10 @@ Ball::Ball(sf::RenderWindow* window, float velocity, GameManager* gameManager)
     _sprite.setRadius(RADIUS);
     _sprite.setFillColor(sf::Color::Cyan);
     _sprite.setPosition(0, 300);
+
+    _lastTrailPos = _sprite.getPosition() + sf::Vector2f(RADIUS, RADIUS);
+    _trail.clear();
+    _trail.push_back(_lastTrailPos);
 }
 
 Ball::~Ball()
@@ -43,6 +47,8 @@ void Ball::update(float dt)
     // Update position with a subtle floating-point error
     _sprite.move(_direction * _velocity * dt);
 
+    addTrailPoint(_sprite.getPosition() + sf::Vector2f(RADIUS, RADIUS));
+
     // check bounds and bounce
     sf::Vector2f position = _sprite.getPosition();
     sf::Vector2u windowDimensions = _window->getSize();
@@ -65,6 +71,10 @@ void Ball::update(float dt)
         _sprite.setPosition(0, 300);
         _direction = { 1, 1 };
         _gameManager->loseLife();
+
+        _trail.clear();
+        _lastTrailPos = _sprite.getPosition() + sf::Vector2f(RADIUS, RADIUS);
+        _trail.push_back(_lastTrailPos);
     }
 
     // collision with paddle
@@ -92,8 +102,68 @@ void Ball::update(float dt)
     }
 }
 
+void Ball::addTrailPoint(const sf::Vector2f& p)
+{
+    sf::Vector2f d = p - _lastTrailPos;
+    float dist2 = d.x * d.x + d.y * d.y;
+    if (dist2 < TRAIL_MIN_DIST2) return;
+
+    _trail.push_back(p);
+    _lastTrailPos = p;
+
+    // Trim oldest points
+    if (_trail.size() > TRAIL_MAX_POINTS)
+        _trail.pop_front();
+}
+
+void Ball::drawTrail()
+{
+    if (_trail.size() < 2) return;
+
+    sf::VertexArray strip(sf::LineStrip, _trail.size());
+
+    const float maxAlpha = 200.f;
+    const std::size_t n = _trail.size();
+
+    // Pick base colour depending on fireball state
+    sf::Color baseColor;
+    if (_isFireBall)
+    {
+        baseColor = sf::Color(255, 140, 0); 
+    }
+    else
+    {
+        baseColor = sf::Color::Cyan; 
+    }
+
+    for (std::size_t i = 0; i < n; ++i)
+    {
+        float t = static_cast<float>(i) / static_cast<float>(n - 1);
+        sf::Uint8 a = static_cast<sf::Uint8>(t * maxAlpha);
+
+        strip[i].position = _trail[i]; 
+        strip[i].color = sf::Color(baseColor.r, baseColor.g, baseColor.b, a);
+    }
+
+    const int thickness = 2;
+    _window->draw(strip);
+
+    for (int offset = -thickness; offset <= thickness; ++offset)
+    {
+        if (offset == 0) continue;
+        sf::VertexArray thickLine(sf::LineStrip, _trail.size());
+        for (std::size_t i = 0; i < n; ++i)
+        {
+            thickLine[i].position = strip[i].position + sf::Vector2f(offset, 0.f);
+            thickLine[i].color = strip[i].color;
+        }
+        _window->draw(thickLine);
+    }
+}
+
 void Ball::render()
 {
+    drawTrail();
     _window->draw(_sprite);
 }
 
