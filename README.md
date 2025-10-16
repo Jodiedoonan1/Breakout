@@ -37,3 +37,4 @@ fire ball (green)
 * Fixed the compiler issues in the code by removing the #include "PowerupFireBall.h" from PowerupBase.h
 * Implemented mouse input for paddle
 * Implemented ball trail
+* Implemented brick now falls off the screen when hit
