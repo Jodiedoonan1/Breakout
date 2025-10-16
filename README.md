@@ -35,3 +35,4 @@ fire ball (green)
 <Add information to this section about the time you've taken for this task along with a professional changelist.>
 
 * Fixed the compiler issues in the code by removing the #include "PowerupFireBall.h" from PowerupBase.h
+* Implemented mouse input for paddle

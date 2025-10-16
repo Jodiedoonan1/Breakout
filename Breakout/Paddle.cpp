@@ -43,6 +43,39 @@ void Paddle::update(float dt)
     {
         setWidth(1.0f, 0.0f); // Reset to default width after duration
     }
+
+    const bool left = sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left);
+    const bool right = sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
+
+    if (left && !right)
+    {
+        moveLeft(dt);
+    }
+    else if (right && !left)
+    {
+        moveRight(dt);
+    }
+    else
+    {
+        
+        // Track last mouse position so we only react when it moves
+        static bool first = true;
+        static int lastMouseX = 0;
+
+        int currentMouseX = sf::Mouse::getPosition(*_window).x;
+
+        if (first) { lastMouseX = currentMouseX; first = false; }
+
+        if (currentMouseX != lastMouseX)  // Only move when the mouse moves
+        {
+            float targetX = static_cast<float>(currentMouseX) - _width * 0.5f;
+            targetX = std::clamp(targetX, 0.0f, static_cast<float>(_window->getSize().x) - _width);
+            _sprite.setPosition(targetX, _sprite.getPosition().y);
+        }
+
+        lastMouseX = currentMouseX;
+        
+    }
 }
 
 void Paddle::render()
