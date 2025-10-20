@@ -38,3 +38,5 @@ fire ball (green)
 * Implemented mouse input for paddle
 * Implemented ball trail
 * Implemented brick now falls off the screen when hit
+* Implemented screen shake when a life is lost
+* Parameterised powerup spawn chance

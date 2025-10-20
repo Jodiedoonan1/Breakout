@@ -36,6 +36,12 @@ private:
     bool _levelComplete;
     std::pair<POWERUPS, float> _powerupInEffect;
 
+    sf::View _originalView;        
+    float _shakeTime = 0.f;       
+    float _shakeDuration = 0.f;    
+    float _shakeIntensity = 0.f;  
+    sf::Vector2f _shakeOffset{ 0.f, 0.f };
+
     sf::Font _font;
     sf::Text _masterText;
 
@@ -49,4 +55,5 @@ private:
 
     static constexpr float PAUSE_TIME_BUFFER = 0.5f;
     static constexpr float POWERUP_FREQUENCY = 7.5f;    // time between minimum powerup spawn
+    static constexpr int POWERUP_SPAWN_CHANCE = 700;
 };
