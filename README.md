@@ -34,9 +34,9 @@ fire ball (green)
 # Time Details and Changelist
 <Add information to this section about the time you've taken for this task along with a professional changelist.>
 
-* Fixed the compiler issues in the code by removing the #include "PowerupFireBall.h" from PowerupBase.h
-* Implemented mouse input for paddle
-* Implemented ball trail
-* Implemented brick now falls off the screen when hit
-* Implemented screen shake when a life is lost
-* Parameterised powerup spawn chance
+* Fixed the compiler issues in the code by removing the #include "PowerupFireBall.h" from PowerupBase.h - 5 minutes
+* Implemented mouse input for paddle - 40 minutes
+* Implemented ball trail - 60 minutes 
+* Implemented brick now falls off the screen when hit - 45 minutes 
+* Implemented screen shake when a life is lost - 20 minutes
+* Parameterised powerup spawn chance - 10 minutes
